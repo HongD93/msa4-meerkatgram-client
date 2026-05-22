@@ -14,7 +14,7 @@ export const usePostIndexStore = defineStore('postIndex', () => {
 
   // 3. Actions (function)
   const getPostPagination = async (page = 1) => {
-    //마지막 페이지가 아닐경우만 실행
+    // 마지막 페이지가 아닐경우만 실행
     if(!isLastPage.value) {
       try {
         const url = '/api/posts';
