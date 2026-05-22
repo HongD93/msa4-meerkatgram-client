@@ -13,8 +13,7 @@ export const usePostIndexStore = defineStore('postIndex', () => {
   const getNextPageNumber = computed(() => currentPage.value + 1);
 
   // 3. Actions (function)
-  const getPostPagination = async (page
-     = 1) => {
+  const getPostPagination = async (page = 1) => {
     //마지막 페이지가 아닐경우만 실행
     if(!isLastPage.value) {
       try {
