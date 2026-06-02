@@ -40,6 +40,7 @@ const handleSubmit = async () => {
     :required="true"
     v-model="loginForm.email"
   ></MyInput>
+  
   <MyInput
     :type="'password'"
     :placeholder="'Password'"
