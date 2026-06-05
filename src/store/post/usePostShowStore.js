@@ -4,7 +4,7 @@ import myAxios from "../../api/MyAxios";
 
 export const usePostShowStore = defineStore('postShowStore', () => {
   // 1. State
-  const post = ref();
+  const post = ref(null);
 
   // 2. Getters
 
@@ -21,9 +21,14 @@ export const usePostShowStore = defineStore('postShowStore', () => {
     }
   }
 
+  const clearPostShow = () => {
+    post.value = null;
+  }
+
   return {
     post,
     getPost,
+    clearPostShow,
   }
 
 });
