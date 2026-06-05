@@ -55,6 +55,7 @@ const logout = async () => {
       />
     </div>
   </div>
+  <hr>
 </template>
 
 <style scoped>

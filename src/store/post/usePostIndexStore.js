@@ -37,7 +37,7 @@ export const usePostIndexStore = defineStore('postIndex', () => {
       } catch (error) {
         // try catch 문에서 throw 하나만 있을때는 try catch문을 지워도 된다
         console.error(error);
-        useMyErrorStore().setErrorInfo(error);
+        throw error;
       }
     }
   }

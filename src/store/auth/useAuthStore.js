@@ -28,14 +28,7 @@ export const useAuthStore = defineStore('authStore', () => {
       userInfo.value = data.user;
       isLoggedIn.value = true;
     } catch (error) {
-      if(error.response) {
-        if(error.response.data.code === 'E01') {
-          alert(error.response.data.data);
-          return;
-        }
-      }
-
-      useMyErrorStore().setErrorInfo(error);
+      throw error;
     }
   }
 

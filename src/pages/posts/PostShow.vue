@@ -3,19 +3,20 @@ import { onBeforeMount, onBeforeUnmount } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { usePostShowStore } from '../../store/post/usePostShowStore';
 import { useAuthStore } from '../../store/auth/useAuthStore';
+import { useMyErrorStore } from '../../store/error/useMyErrorStore';
 
 const route = useRoute();
 const router = useRouter();
 const postShowStore = usePostShowStore();
 const authStore = useAuthStore();
+const myErrorStore = useMyErrorStore();
 
 onBeforeMount(async () => {
   try {
     await postShowStore.getPost(route.params.id);
   } catch (error) {
-    const msg = error?.response?.data.data ? error?.response?.data.data : "게시글 획득 실패";
-    alert(msg);
-    router.replace('/');
+    myErrorStore.setErrorInfo(error);
+    router.replace('/error');
   }
 });
 onBeforeUnmount(postShowStore.clearPostShow);
@@ -67,7 +68,7 @@ onBeforeUnmount(postShowStore.clearPostShow);
 .delete-icon {
   width: 40px;
   height: 50px;
-  background-image: url('/public/icons/trash-can.png');
+  background-image: url('/icons/trash-can.png');
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
@@ -76,7 +77,7 @@ onBeforeUnmount(postShowStore.clearPostShow);
 .like-icon {
   width: 40px;
   height: 40px;
-  background-image: url('/public/icons/heart-fill.png');
+  background-image: url('/icons/heart-fill.png');
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
