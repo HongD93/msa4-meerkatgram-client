@@ -1,7 +1,12 @@
 <script setup>
+import router from '../routes/router';
 import { useAuthStore } from '../store/auth/useAuthStore';
 
 const authStore = useAuthStore();
+
+const createPost = () => {
+  router.push('/posts/create');
+}
 </script>
 
 <template>
@@ -27,6 +32,7 @@ const authStore = useAuthStore();
       <div 
         class="bg-image-square redirect-icon-posts-create"
         style="background-image: url('/icons/plus-sign.png');"
+        @click="createPost()"
       ></div>
       <div 
         class="bg-image-square redirect-icon-users-info"
