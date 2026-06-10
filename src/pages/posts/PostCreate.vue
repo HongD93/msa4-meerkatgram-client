@@ -2,44 +2,72 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import MyButton from '../../components/button/MyButton.vue';
-import MyInput from '../../components/input/MyInput.vue';
+import { usePostCreateStore } from '../../store/post/usePostCreateStore';
+import { useFileStore } from '../../store/file/useFileStore';
 
 const router = useRouter();
+const postCreateStore = usePostCreateStore();
+const fileStore = useFileStore();
 
 const postContent = ref(''); 
 const preview = ref(null);   
 const selectedFile = ref(null); 
+const isSubmitting = ref(false);
 
 const handleSubmit = async () => {
+  if (isSubmitting.value) {
+    return;
+  }
+
   if (!postContent.value) {
     alert('내용을 작성해주세요.');
     return;
   }
 
+  if (!selectedFile.value) {
+    alert('이미지를 선택해주세요.');
+    return;
+  }
+
   try {
-    // TODO: 실제 게시글 저장 API 호출 로직을 여기에 작성하세요.
-    // 예: await postStore.createPost({ content: postContent.value, image: selectedFile.value });
+    isSubmitting.value = true;
+    const imageUrl = await fileStore.uploadPostImage(selectedFile.value);
+
+    if (!imageUrl) {
+      alert('이미지 업로드에 실패했습니다.');
+      isSubmitting.value = false;
+      return;
+    }
+
+    const postData = {
+      content: postContent.value,
+      image: imageUrl
+    };
+
+    const res = await postCreateStore.createPost(postData);
     
-    alert("게시글이 작성되었습니다.");
-    router.replace('/posts');
+    if (res.code === '00') {
+      alert("게시글이 작성되었습니다.");
+      router.replace('/posts');
+    } else {
+      alert(res.message || '게시글 작성에 실패했습니다.');
+      isSubmitting.value = false;
+    }
   } catch (error) {
     console.error(error);
     alert('게시글 작성 중 오류가 발생했습니다.');
+    isSubmitting.value = false;
   }
 }
 
-// 이미지 파일 첨부 및 미리보기 함수
 const handleChangeImage = (e) => {
   const file = e.target.files[0];
 
   if (file) {
     if (preview.value) {
-      // 기존에 생성된 메모리 URL이 있다면 해제 (메모리 누수 방지)
       URL.revokeObjectURL(preview.value);
     }
-
     selectedFile.value = file;
-    // 파일 객체를 브라우저에서 접근 가능한 임시 URL로 변환하여 미리보기 제공
     preview.value = URL.createObjectURL(file);
   }
 }
@@ -69,9 +97,9 @@ const handleChangeImage = (e) => {
 
   <MyButton
     :btn-type="'submit'"
-    :color="'black'"
+    :color="isSubmitting ? 'gray' : 'black'"
     :size="'middle'"
-    :content="'Write'"
+    :content="isSubmitting ? 'Writing...' : 'Write'"
   ></MyButton>
   
 </form>

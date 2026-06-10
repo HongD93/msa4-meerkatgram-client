@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
 import myAxios from "../../api/MyAxios";
 
 export const usePostCreateStore = defineStore('postCreate', () => {
@@ -8,26 +7,19 @@ export const usePostCreateStore = defineStore('postCreate', () => {
   // 2. getters
   
   // 3. actions
-  const uploadPost = async (formData) => {
+  const createPost = async (postData) => {
     try {
-      const url = '/api/posts/create';
+      const url = '/api/posts';
 
-      // Content-type 변경
-      const config = {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      }
-
-      const res = await myAxios.post(url, formData, config);
-      return res.data.data.fileUri;
+      const res = await myAxios.post(url, postData);
+      return res.data;
     } catch (error) {
       console.error(error);
-      return null;
+      throw error;
     }
   }
 
   return {
-    uploadPost,
+    createPost,
   }
 });
