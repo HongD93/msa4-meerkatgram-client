@@ -48,7 +48,7 @@ const handleSubmit = async () => {
     
     if (res.code === '00') {
       alert("게시글이 작성되었습니다.");
-      router.replace('/posts');
+      router.replace(`/posts/${res.data.id}`);
     } else {
       alert(res.message || '게시글 작성에 실패했습니다.');
       isSubmitting.value = false;
